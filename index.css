@@ -1,0 +1,21 @@
+.carte {
+  border: 2px solid black;
+  height: 200px;
+  width: 120px;
+}
+
+.rouge {
+  background-color: red;
+}
+
+.vert {
+  background-color: green;
+}
+
+.jaune {
+  background-color: yellow;
+}
+
+.bleu {
+  background-color: blue;
+}
