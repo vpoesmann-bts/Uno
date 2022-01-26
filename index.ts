@@ -29,4 +29,26 @@ for (let i: number = 0 ; i < 4 ; i++) {
   }
 }
 
+let nbJoueurs: number = parseInt(prompt("Indiquez un nombre de joueurs entre 2 et 10"))
+
+while (nbJoueurs < 2 || nbJoueurs > 10) {
+  nbJoueurs = parseInt(prompt("Nombre de joueurs incorrect, indiquez un nombre de joueurs entre 2 et 10"))
+}
+
+if (isNaN(nbJoueurs)) {
+  nbJoueurs = 2
+}
+
+function shuffle (array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
+shuffle(jeuCartes)
+
+console.log(nbJoueurs)
 console.log(jeuCartes)
