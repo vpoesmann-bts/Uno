@@ -13,13 +13,11 @@ enum Valeur {
   Plus4,
 }
 
+const NB_CARTES_INITIALES: number = 8
+const COULEURS_CARTES: string[] = ["rouge", "vert", "jaune", "bleu"]
+
 let jeuCartes: number[][] = []
 let mainsJoueurs: number[][][] = []
-
-let newDiv = document.createElement("div");
-document.body.appendChild(newDiv);
-newDiv.classList.add("carte");
-newDiv.classList.add("rouge");
 
 for (let i: number = 0 ; i < 4 ; i++) {
   for (let j: number = 0 ; j < 15 ; j++) {
@@ -39,8 +37,6 @@ while (nbJoueurs < 2 || nbJoueurs > 10) {
 if (isNaN(nbJoueurs)) {
   nbJoueurs = 2
 }
-
-
 function shuffle (array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -54,11 +50,29 @@ shuffle(jeuCartes)
 
 for(let i: number = 0 ; i < nbJoueurs ; i++) {
   mainsJoueurs.push([])
-  for(let j: number = 0 ; j < 8 ; j++) {
+  for(let j: number = 0 ; j < NB_CARTES_INITIALES ; j++) {
     let carte: number[] = jeuCartes.shift()
     mainsJoueurs[i].push(carte)
   }
 }
+
+for (let i: number = 0 ; i < nbJoueurs ; i++) {
+  let cartesJoueur = document.createElement("div");
+  document.body.appendChild(cartesJoueur);
+
+  cartesJoueur.id = i.toString()
+  cartesJoueur.classList.add("paquetCartes");
+
+  for (let j: number = 0 ; j < NB_CARTES_INITIALES ; j++) {
+    let carteHTML = document.createElement("div")
+    cartesJoueur.appendChild(carteHTML)
+    carteHTML.classList.add("carte")
+    let numCouleurCarte: number = mainsJoueurs[i][j][1]
+    let couleurCarte: string = COULEURS_CARTES[numCouleurCarte]
+    carteHTML.classList.add(couleurCarte)
+  }
+}
+
 
 console.log(nbJoueurs)
 console.log(jeuCartes)

@@ -19,3 +19,8 @@
 .bleu {
   background-color: blue;
 }
+
+.paquetCartes {
+  display: flex;
+  flex-direction: row;
+}
