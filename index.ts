@@ -65,10 +65,19 @@ for (let i: number = 0 ; i < nbJoueurs ; i++) {
 
   for (let j: number = 0 ; j < NB_CARTES_INITIALES ; j++) {
     let carteHTML = document.createElement("div")
-    cartesJoueur.appendChild(carteHTML)
     carteHTML.classList.add("carte")
+
+    let texteCarteHTML = document.createElement("p")
+    texteCarteHTML.classList.add("valeurCarte")
+
+    carteHTML.appendChild(texteCarteHTML)
+    cartesJoueur.appendChild(carteHTML)
+
     let numCouleurCarte: number = mainsJoueurs[i][j][1]
+    let numCarte: number = mainsJoueurs[i][j][0]
     let couleurCarte: string = COULEURS_CARTES[numCouleurCarte]
+
+    texteCarteHTML.innerHTML = numCarte.toString()
     carteHTML.classList.add(couleurCarte)
   }
 }
