@@ -14,6 +14,7 @@ enum Valeur {
 }
 
 let jeuCartes: number[][] = []
+let mainsJoueurs: number[][][] = []
 
 let newDiv = document.createElement("div");
 document.body.appendChild(newDiv);
@@ -39,6 +40,7 @@ if (isNaN(nbJoueurs)) {
   nbJoueurs = 2
 }
 
+
 function shuffle (array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -50,5 +52,14 @@ function shuffle (array) {
 
 shuffle(jeuCartes)
 
+for(let i: number = 0 ; i < nbJoueurs ; i++) {
+  mainsJoueurs.push([])
+  for(let j: number = 0 ; j < 8 ; j++) {
+    let carte: number[] = jeuCartes.shift()
+    mainsJoueurs[i].push(carte)
+  }
+}
+
 console.log(nbJoueurs)
 console.log(jeuCartes)
+console.log(mainsJoueurs)
