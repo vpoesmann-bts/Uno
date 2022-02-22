@@ -96,7 +96,7 @@ function creerLignesJoueursHTML() {
     let cartesJoueur = document.createElement("div");
     document.body.appendChild(cartesJoueur);
 
-    cartesJoueur.id = i.toString()
+    cartesJoueur.id = "m" + i.toString()
     cartesJoueur.classList.add("paquetCartes");
   }
 }
@@ -150,6 +150,26 @@ function piocherPremiereCarte() {
   carteVisible.appendChild(creerCarteHTML(derniereCarte))
 }
 
+// Permet de piocher une carte
+function pioche(indexMain: number) {
+  if (jeuCartes.length === 0) {
+    if (cartesJouees.length <= 1) {
+      alert("Plus de cartes disponibles !")
+      return
+    }
+    jeuCartes = cartesJouees.splice(0, cartesJouees.length -1)
+  }
+
+
+  let cartePiochee: number[] = jeuCartes.pop()
+  mainsJoueurs[indexMain].push(cartePiochee)
+  let carteHTML = creerCarteHTML(cartePiochee)
+  carteHTML.addEventListener("click", function(event) {
+    jouerTour(indexMain, cartePiochee)
+  })
+  document.getElementById("m"+indexMain.toString()).appendChild(carteHTML)
+}
+
 // Fonction permettant de faire la distribution initiale des cartes en HTML
 function distributionHTML() {
   for (let i: number = 0 ; i < nbJoueurs ; i++) {
@@ -162,25 +182,29 @@ function distributionHTML() {
       let carteHTML = creerCarteHTML(carte)
 
       carteHTML.addEventListener("click", function(event) {
-        if(i === tourJoueur && jouerCarte(carte)) {
-          let carteJouee: number[] = supprimerCarteMain(i, carte[2])
-          jouerCarteHTML(carteJouee)
-          cartesJouees.push(carteJouee)
-
-          prochainTour()
-        }
+        jouerTour(i, carte)
       })
 
       // On l'ajoute à la bonne rangée
-      document.getElementById(i.toString()).appendChild(carteHTML)
+      document.getElementById("m"+i.toString()).appendChild(carteHTML)
 
     }
   }
 }
 
+function jouerTour(indexJoueur: number, carte: number[]) {
+  if(indexJoueur === tourJoueur && jouerCarte(carte)) {
+    let carteJouee: number[] = supprimerCarteMain(indexJoueur, carte[2])
+    jouerCarteHTML(carteJouee)
+    cartesJouees.push(carteJouee)
+
+    prochainTour()
+  }
+}
+
 // Joue la carte et applique ses effets si elle en a
 function jouerCarte(carte: number[]) {
-  if (cartesJouees.length !== 0 && !carteJouable(carte, cartesJouees[cartesJouees.length -1])) {
+  if (!carteJouable(carte, cartesJouees[cartesJouees.length -1])) {
     return false
   } else {
 
@@ -199,6 +223,7 @@ function jouerCarteHTML(carte: number[]) {
 
 // Teste si la carte sélectionnée est jouable sur la carte précédente
 function carteJouable(carte, cartePrec) {
+  console.log(carte, cartePrec)
   if (carte[0] >= Valeur.Joker) {
     return true
   } else if (carte[0] === cartePrec[0] || carte[1] === cartePrec[1]) {
@@ -226,3 +251,9 @@ distributionHTML()
 
 piocherPremiereCarte()
 jouerCarte(cartesJouees[0])
+
+document.getElementById("pioche").addEventListener("click", function(event) {
+  pioche(tourJoueur)
+  prochainTour()
+  console.log(tourJoueur)
+})
