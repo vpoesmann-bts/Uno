@@ -152,18 +152,24 @@ function piocherPremiereCarte() {
 
 // Permet de piocher une carte
 function pioche(indexMain: number) {
+  // Vérifie si la pioche est vide
   if (jeuCartes.length === 0) {
     if (cartesJouees.length <= 1) {
+      // Il n'y a plus aucune carte dans la pile ni dans la pioche
       alert("Plus de cartes disponibles !")
       return
     }
+    // Il reste des cartes dans la pile, on les transfère dans la pioche et on mélange
     jeuCartes = cartesJouees.splice(0, cartesJouees.length -1)
+    shuffle(jeuCartes)
   }
 
-
+  // On pioche une carte, on la donne au joueur courant
   let cartePiochee: number[] = jeuCartes.pop()
   mainsJoueurs[indexMain].push(cartePiochee)
   let carteHTML = creerCarteHTML(cartePiochee)
+
+  // On rend la carte jouable
   carteHTML.addEventListener("click", function(event) {
     jouerTour(indexMain, cartePiochee)
   })
@@ -192,11 +198,16 @@ function distributionHTML() {
   }
 }
 
+// Fonction de déroulement du tour après avoir cliqué sur une carte
 function jouerTour(indexJoueur: number, carte: number[]) {
-  if(indexJoueur === tourJoueur && jouerCarte(carte)) {
+  if(indexJoueur === tourJoueur &&
+     carteJouable(carte, cartesJouees[cartesJouees.length -1])) {
     let carteJouee: number[] = supprimerCarteMain(indexJoueur, carte[2])
+    jouerCarte(carte)
     jouerCarteHTML(carteJouee)
     cartesJouees.push(carteJouee)
+
+    // TODO Vérifier si le joueur a gagné la partie
 
     prochainTour()
   }
@@ -207,7 +218,17 @@ function jouerCarte(carte: number[]) {
   if (!carteJouable(carte, cartesJouees[cartesJouees.length -1])) {
     return false
   } else {
+    if (carte[0] === Valeur.Plus2) {
+      // TODO faire piocher deux cartes et passer le tour
+    } else if (carte[0] === Valeur.Inversion) {
+      // TODO inverser les tours de jeu
+    } else if (carte[0] === Valeur.Passe) {
+      prochainTour()
+    } else if (carte[0] === Valeur.Joker) {
 
+    } else if (carte[0] === Valeur.Plus4) {
+
+    }
     return true
   }
 }
@@ -235,10 +256,12 @@ function carteJouable(carte, cartePrec) {
 
 // Change le tour de jeu
 function prochainTour() {
+  // TODO Ajouter un moyen d'inverser le sens de rotation
   tourJoueur += 1
   if (tourJoueur >= nbJoueurs) {
     tourJoueur = 0
   }
+  document.getElementById("tourJoueur").innerHTML = (tourJoueur + 1).toString()
 }
 
 remplirPioche()
@@ -255,5 +278,6 @@ jouerCarte(cartesJouees[0])
 document.getElementById("pioche").addEventListener("click", function(event) {
   pioche(tourJoueur)
   prochainTour()
-  console.log(tourJoueur)
 })
+
+document.getElementById("tourJoueur").innerHTML = (tourJoueur + 1).toString()
