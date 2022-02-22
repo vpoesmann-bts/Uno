@@ -20,6 +20,10 @@
   background-color: blue;
 }
 
+.noir {
+  background-color: black;
+}
+
 .paquetCartes {
   display: flex;
   flex-direction: row;
